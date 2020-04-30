@@ -1,8 +1,10 @@
+import telepot
 from flask import Flask, request
 from gpiozero import LED
-import telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import ReplyKeyboardMarkup
+
+from extLib import lcddriver
 
 radioScanner = LED(14)  # Only on
 radioCRI = LED(23)
@@ -12,6 +14,8 @@ computer = LED(18)  # Only ON
 homeMini = LED(7)  # Only ON
 cell = LED(8)
 svegliaVar = LED(1)  # Only ON
+
+display = lcddriver.lcd()
 
 
 # ---------------------------------
@@ -231,9 +235,78 @@ keyboard = ReplyKeyboardMarkup(keyboard=[
     ['ALL ON' + greenSquare(), 'ALL OFF' + redSquare()],
     ['/ADV']])
 
+keyboardAdv = ReplyKeyboardMarkup(keyboard=[
+        ['/BACK'],
+        ['RADIO SCANNER ON', 'RADIO SCANNER OFF'],
+        ['118 ON', '118 OFF', 'VVF ON', 'VVF OFF'],
+        ['LUCE ON', 'LUCE OFF'],
+        ['COMPUTER ON', 'COMPUTER OFF'],
+        ['CARICATORE ON', 'CARICATORE OFF']])
+
 
 def isOnline():
     bot.sendMessage(myId(), "Bot online", reply_markup=keyboard)
+
+
+def status():
+    stat = ""
+    if radioScanner.is_active:
+        stat += "Radio scanner " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio scanner " + greenSquare())
+    else:
+        stat += "Radio scanner " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio scanner " + redSquare())
+
+    if radioCRI.is_active:
+        stat += "Radio 118 " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio 118 " + greenSquare())
+    else:
+        stat += "Radio 118 " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio 118 " + redSquare())
+
+    if radioVVF.is_active:
+        stat += "Radio VVF " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio VVF " + greenSquare())
+    else:
+        stat += "Radio VVF " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Radio VVF " + redSquare())
+
+    if luce.is_active:
+        stat += "Luce " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Luce " + greenSquare())
+    else:
+        stat += "Luce " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Luce" + redSquare())
+
+    if computer.is_active:
+        stat += "Computer " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Computer " + greenSquare())
+    else:
+        stat += "Computer " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Computer " + redSquare())
+
+    if homeMini.is_active:
+        stat += "Home Mini " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Home Mini " + greenSquare())
+    else:
+        stat += "Home Mini " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Home Mini " + redSquare())
+
+    if cell.is_active:
+        stat += "Caricatore " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Caricatore " + greenSquare())
+    else:
+        stat += "Caricatore " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Caricatore " + redSquare())
+
+    if svegliaVar.is_active:
+        stat += "Sveglia " + greenSquare() + "\n"
+        # bot.sendMessage(myId(), "Sveglia " + greenSquare())
+    else:
+        stat += "Sveglia " + redSquare() + "\n"
+        # bot.sendMessage(myId(), "Sveglia " + redSquare())
+
+    bot.sendMessage(myId(), stat)
 
 
 def handle(msg):
@@ -270,8 +343,17 @@ def handle(msg):
     # START
     elif text == '/START':
         bot.sendMessage(myId(), "Benvenuto!" + faceEM(), reply_markup=keyboard)
+    elif text == '/STATUS':
+        bot.sendMessage(myId(), "DIAGNOSITCA IN CORSO...")
+        status()
 
-    # BACK
+    # ADV
+    elif text == '/ADV':
+        if chatId == myId():
+            bot.sendMessage(myId(), "Sezione avanzata abilitata.", reply_markup=keyboardAdv)
+        else:
+            bot.sendMessage(myId(), "Non sei autorizzato")
+
     elif text == '/BACK':
         bot.sendMessage(myId(), 'Sessione avanzata disabilitata.', reply_markup=keyboard)
 
@@ -327,3 +409,8 @@ MessageLoop(bot, handle).run_as_thread()
 
 
 app.run(host='0.0.0.0')
+
+if KeyboardInterrupt:
+    display.lcd_display_string("FLASK ~ OFF", 1)
+    display.lcd_display_string("TELEGRAM ~ OFF", 2)
+    bot.sendMessage(myId(), "Bot offline")
