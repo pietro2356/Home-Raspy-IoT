@@ -1,5 +1,8 @@
 from flask import Flask, request
 from gpiozero import LED
+import telepot
+from telepot.loop import MessageLoop
+from telepot.namedtuple import ReplyKeyboardMarkup
 
 radioScanner = LED(14)  # Only on
 radioCRI = LED(23)
@@ -11,12 +14,20 @@ cell = LED(8)
 svegliaVar = LED(1)  # Only ON
 
 
+# ---------------------------------
+def botToken():
+    return "<<Telegram bot token>>"     # Lo fornisce BotFather alla creazione del bot telegram.
+
+
+def myId():
+    return -1   # ChatID del proprietario.
+# ---------------------------------
+
+
 app = Flask(__name__)
+bot = telepot.Bot(botToken())
 
 
-# ---------------------------------
-
-# ---------------------------------
 
 
 @app.route('/status')
