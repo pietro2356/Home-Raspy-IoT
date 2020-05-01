@@ -1,6 +1,6 @@
 MIT License
 
-Copyright (c) 2020 pietro rocchio
+Copyright (c) 2020 Pietro Rocchio
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
