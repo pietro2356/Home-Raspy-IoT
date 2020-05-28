@@ -2,7 +2,7 @@
 
 Ecco cosa serve per far funzionare il codice
 
-> PREMESSA: L'ambiente utilizzato e **Unix Based**.
+> **PREMESSA: L'ambiente utilizzato e Unix Based.**
 
 ## 1. Ambiente virtuale:
 
@@ -80,7 +80,9 @@ Una volta avviato verrà generato un'output di questo tipo:
 * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
 
-## 2. Uso GPIO del RaspberryPi
+---
+
+### 2. Uso GPIO del RaspberryPi
 
 Adesso andiamo ad analizzre come utilizzre le GPIO del nostro RaspberryPi.
 
@@ -102,4 +104,40 @@ Una volta fatto ciò, basterà lanciare il comando:
 
 ```shell
 pinout
+```
+
+---
+
+#### 3. Implementazione bot Telegram
+
+> **Per prima cosa bisogna creare un bot telegram tramite botFather.**
+
+Adesso vi sono un paio di operazioni da fare:
+
+1. installare telepot.
+
+2. implementare telepot tramite python.
+
+```shell
+# Passo 1
+sudo pip3 install telepot
+```
+
+```python
+# Passo 2
+
+import telepot
+from telepot.loop import MessageLoop
+from telepot.namedtuple import ReplyKeyboardMarkup
+```
+
+Per comodità andiamo a definire due funzioni che ci restituiranno il nostro ChatID ed il tag del bot telegram fornito da botFather.
+
+```python
+def botToken():
+    return "Bot token"
+
+
+def myId():
+    return -1 # Sostituire col proprio chatID.
 ```
