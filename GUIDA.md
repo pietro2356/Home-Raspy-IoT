@@ -79,3 +79,27 @@ Una volta avviato verrà generato un'output di questo tipo:
 * Debug mode: off
 * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
 ```
+
+## 2. Uso GPIO del RaspberryPi
+
+Adesso andiamo ad analizzre come utilizzre le GPIO del nostro RaspberryPi.
+
+#### Installiamo le librerie per le GPIO
+
+Nell ultime versioni i pin sono pressocché indentici, ma per sicurezza volgiamo visualizzare la pinnatura del nostro Raspberry. 
+
+Per fare questo ci servirà un pacchetto python chiamato gpiozero:
+
+```shell
+# Aggiorniamo il raspberry
+sudo apt update && sudo apt upgrade
+
+# Installiamo il paccheto con:
+sudo apt install python3-gpiozero
+```
+
+Una volta fatto ciò, basterà lanciare il comando:
+
+```shell
+pinout
+```
